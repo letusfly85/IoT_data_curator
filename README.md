@@ -1,6 +1,4 @@
-# IoT_data_curator
+[![Build Status](https://travis-ci.org/letusfly85/IoT_data_curator.svg?branch=master)](https://travis-ci.org/letusfly85/IoT_data_curator)
 
-This is your new Play application
-=================================
+# IoT data curator
 
-This file will be packaged with your application, when using `activator dist`.
