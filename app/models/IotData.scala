@@ -5,10 +5,13 @@ import java.io.InputStream
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient
 import com.amazonaws.services.dynamodbv2.document.{Item, DynamoDB}
+import com.amazonaws.services.dynamodbv2.model.{ComparisonOperator, AttributeValue, Condition, QueryRequest}
 
 import org.apache.commons.configuration.{PropertiesConfiguration}
 
-//case class IotData(id: Int, detail: String)
+import scala.collection.mutable.Map
+import scala.collection.JavaConverters._
+
 
 object IoTData {
 
@@ -32,12 +35,21 @@ object IoTData {
 
     println(table.describe())
 
-    val item = new Item().withPrimaryKey("id", 1).withString("detail", "sample data")
+    def item(id: Int): Item = new Item().withPrimaryKey("id", id).withString("detail", "sample data")
     List(1,2,3,4,5,6).foreach {id =>
-      val outcome = table.putItem(new Item().withInt("id", id).withString("detail", s"sample data ${id}"))
-
-      println(outcome)
+      val outcome = table.putItem(item(id))
     }
 
+    val condition: Condition = new Condition()
+        .withComparisonOperator(ComparisonOperator.EQ)
+        .withAttributeValueList(new AttributeValue().withN("20"))
+
+    val keyConditions: Seq[(String, Condition)] = Seq(("id", condition))
+
+    val queryRequest: QueryRequest = new QueryRequest().withTableName("IotData")
+        .withKeyConditions(keyConditions.toMap.asJava)
+
+    val outcome = client.query(queryRequest)
+    println(outcome.getItems)
   }
 }
