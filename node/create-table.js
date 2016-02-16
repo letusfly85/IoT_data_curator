@@ -2,7 +2,6 @@ var AWS = require('aws-sdk')
 AWS.config.loadFromPath('node/config.json');
 
 var dynamo = new AWS.DynamoDB({region: 'us-east-1', endpoint: 'http://127.0.0.1'})
-dynamo.listTables(console.log.bind(console))
 
 var params = {
     TableName : "IotData",
