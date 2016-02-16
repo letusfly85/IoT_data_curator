@@ -13,6 +13,13 @@ libraryDependencies ++= Seq(
   specs2 % Test
 )
 
+libraryDependencies ++= {
+  Seq(
+    "com.amazonaws" % "aws-java-sdk" % "1.10.52",
+    "commons-configuration" % "commons-configuration" % "1.10"
+  )
+}
+
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
 // Play provides two styles of routers, one expects its actions to be injected, the
