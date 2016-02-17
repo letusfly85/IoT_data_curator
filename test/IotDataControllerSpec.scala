@@ -30,7 +30,7 @@ object IotDataControllerSpec extends PlaySpecification {
       val bodyText = contentAsString(result)
 
       println(bodyText)
-      bodyText must be equalTo(s"""{"detail":"100","id":"10"}""")
+      bodyText must be equalTo(s"""{"detail":"sample data","id":"10"}""")
     }
   }
 }
