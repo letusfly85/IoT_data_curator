@@ -13,4 +13,5 @@ before_install:
   - node node/create-table.js
 
 script:
+  - cp conf/credentials /home/travis/.aws/credentials
   - sbt -Dtest.env=CI clean compile test
