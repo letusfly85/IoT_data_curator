@@ -30,7 +30,13 @@ object IoTData {
     new PropertiesConfiguration()
   configuration.load(inputStream, "UTF8")
 
-  val endpoint = configuration.getString("dynalite.endpoint")
+  var endpoint = ""
+  if (System.getProperty("test.env") == "CI") {
+    endpoint = "http://127.0.0.1:4567"
+  } else {
+    endpoint = configuration.getString("dynalite.endpoint")
+  }
+
   val client = new AmazonDynamoDBClient(new ProfileCredentialsProvider())
   client.setEndpoint(endpoint)
   val dynamoDB = new DynamoDB(client)

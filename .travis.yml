@@ -13,4 +13,4 @@ before_install:
   - node node/create-table.js
 
 script:
-  - sbt clean compile test
+  - sbt -Dtest.env=CI clean compile test
