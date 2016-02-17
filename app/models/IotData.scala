@@ -24,8 +24,8 @@ case class IoTData(id: Int, detail: String)
 object IoTData {
 
   var endpoint = ""
-  if (System.getProperty("test.env") == "CI") {
-    endpoint = "http://127.0.0.1"
+  if (System.getProperty("dev.env") != null) {
+    endpoint = System.getProperty("dev.env")
   } else {
     val inputStream: InputStream =
       getClass.getResourceAsStream("/endpoint.properties")

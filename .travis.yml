@@ -8,11 +8,12 @@ services:
   - docker
 
 before_install:
-  - docker run -d -p 127.0.0.1:80:4567 -t letusfly85/dynalite dynalite
+  - docker run -d --name=dynalite -p 127.0.0.1:80:4567 -t letusfly85/dynalite dynalite
   - npm install aws-sdk
   - node node/create-table.js
 
 script:
   - mkdir -p /home/travis/.aws
+  - docker exec -it dynalite echo test
   - cp conf/credentials /home/travis/.aws/credentials
   - sbt -Dtest.env=CI clean compile test
