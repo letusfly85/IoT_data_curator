@@ -23,17 +23,17 @@ case class IoTData(id: Int, detail: String)
   */
 object IoTData {
 
-  val inputStream: InputStream =
-    getClass.getResourceAsStream("/endpoint.properties")
-
-  val configuration: PropertiesConfiguration =
-    new PropertiesConfiguration()
-  configuration.load(inputStream, "UTF8")
-
   var endpoint = ""
   if (System.getProperty("test.env") == "CI") {
     endpoint = "http://127.0.0.1"
   } else {
+    val inputStream: InputStream =
+      getClass.getResourceAsStream("/endpoint.properties")
+
+    val configuration: PropertiesConfiguration =
+      new PropertiesConfiguration()
+    configuration.load(inputStream, "UTF8")
+
     endpoint = configuration.getString("dynalite.endpoint")
   }
 
