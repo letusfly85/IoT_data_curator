@@ -32,7 +32,7 @@ object IoTData {
 
   var endpoint = ""
   if (System.getProperty("test.env") == "CI") {
-    endpoint = "http://127.0.0.1:4567"
+    endpoint = "http://127.0.0.1"
   } else {
     endpoint = configuration.getString("dynalite.endpoint")
   }
@@ -83,7 +83,7 @@ object IoTData {
     * @return
     */
   def convert(map: util.Map[String, AttributeValue]): Map[String, String] = {
-    var _map: Map[String, String] = Map()
+    val _map: Map[String, String] = Map()
     map.asScala.foreach{case (key: String, value: AttributeValue) =>
       key match {
         case "id" => _map.put(key, value.getN)
