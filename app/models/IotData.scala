@@ -23,14 +23,20 @@ case class IoTData(id: Int, detail: String)
   */
 object IoTData {
 
-  val inputStream: InputStream =
-    getClass.getResourceAsStream("/endpoint.properties")
+  var endpoint = ""
+  if (System.getProperty("dev.env") != null) {
+    endpoint = System.getProperty("dev.env")
+  } else {
+    val inputStream: InputStream =
+      getClass.getResourceAsStream("/endpoint.properties")
 
-  val configuration: PropertiesConfiguration =
-    new PropertiesConfiguration()
-  configuration.load(inputStream, "UTF8")
+    val configuration: PropertiesConfiguration =
+      new PropertiesConfiguration()
+    configuration.load(inputStream, "UTF8")
 
-  val endpoint = configuration.getString("dynalite.endpoint")
+    endpoint = configuration.getString("dynalite.endpoint")
+  }
+
   val client = new AmazonDynamoDBClient(new ProfileCredentialsProvider())
   client.setEndpoint(endpoint)
   val dynamoDB = new DynamoDB(client)
@@ -77,7 +83,7 @@ object IoTData {
     * @return
     */
   def convert(map: util.Map[String, AttributeValue]): Map[String, String] = {
-    var _map: Map[String, String] = Map()
+    val _map: Map[String, String] = Map()
     map.asScala.foreach{case (key: String, value: AttributeValue) =>
       key match {
         case "id" => _map.put(key, value.getN)
