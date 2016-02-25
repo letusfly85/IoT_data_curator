@@ -20,9 +20,17 @@ class Application extends Controller {
       "comment" -> text
     )(Csv.apply)(Csv.unapply)
   )
-  def formSample = Action { implicit request =>
+  def upload = Action(parse.multipartFormData) { implicit request =>
     val csv = csvForm.bindFromRequest.get
-    Ok(csv.title)
+    request.body.file("csv_file").map { file =>
+      import java.io.File
+      val filename = file.filename
+      file.ref.moveTo(new File("app/tmp", filename))
+      Ok(csv.title + "のアップロード成功")
+    }.getOrElse {
+      Redirect(routes.Application.index).flashing(
+        "error" -> "Missing file"
+      )
+    }
   }
-
 }
