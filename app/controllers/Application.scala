@@ -24,9 +24,9 @@ class Application extends Controller {
     val csv = csvForm.bindFromRequest.get
     request.body.file("csv_file").map { file =>
       import java.io.File
-      val filename = file.filename
-      file.ref.moveTo(new File("app/tmp", filename))
+      file.ref.moveTo(new File("app/tmp", file.filename))
       Ok(csv.title + "のアップロード成功")
+
     }.getOrElse {
       Redirect(routes.Application.index).flashing(
         "error" -> "Missing file"
