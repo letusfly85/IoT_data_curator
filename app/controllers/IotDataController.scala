@@ -17,7 +17,7 @@ import scala.concurrent.duration._
 class IotDataController @Inject() (system: ActorSystem) extends Controller with PlayControllerTracing {
 
   implicit val sentimentAskTimeout: Timeout = Duration(10, SECONDS)
-  val actor = system.actorOf(HelloActor.props, "hello22")
+  val actor = system.actorOf(Props[HelloActor], "hello22")
 
   val form = Form("id" -> text)
 

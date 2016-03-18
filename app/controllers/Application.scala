@@ -1,35 +1,32 @@
 package controllers
 
-import javax.inject.{Singleton, Inject}
-
-import actors.{Actors, HelloActor}
-import actors.HelloActor.SayHello
+import actors.{HelloActor}
+import actors.SayHello
 import akka.actor._
 import akka.util.Timeout
-import com.github.levkhomich.akka.tracing.BaseTracingSupport
 
-import com.github.levkhomich.akka.tracing.play.{TracingSettings, PlayControllerTracing}
-//import models.GlobalZipkin
-import modules.GlobalZipkinModule
+import com.github.levkhomich.akka.tracing.play.{PlayControllerTracing}
+import com.typesafe.config.ConfigFactory
+
 import play.api.mvc._
-import play.libs.Akka
 
 import scala.concurrent.duration._
 
+class Application extends Controller with PlayControllerTracing {
 
-@Singleton
-class Application @Inject() (settings: GlobalZipkinModule) extends Controller with PlayControllerTracing  {
+  implicit val sentimentAskTimeout: Timeout = Duration(1, SECONDS)
+  val actorSystem = ActorSystem.create("TracingBasics", ConfigFactory.load("application"))
 
-  implicit val sentimentAskTimeout: Timeout = Duration(100, SECONDS)
-  val actorSystem: ActorSystem = Akka.system()
-  println(play.libs.Akka.system().settings.config.hasPath("akka.tracing.host"))
+  def index = Action {implicit request =>
+    val helloActor = actorSystem.actorOf(Props[HelloActor], "hogehoge")
+    val sayHello = SayHello("aaaa")
+    helloActor ! sayHello
 
-  val hogeActor = actorSystem.actorOf(HelloActor.props, "hoge")
-  val sh = SayHello("aaaa")
+    trace.sample(sayHello, "dfree via!")
+    trace.record(sayHello, "Start processing")
+    trace.recordKeyValue(sayHello, "longAnswer", "ADDDDDD")
 
-  def index = Action {
-    hogeActor ! sh
     Ok(views.html.index("Your new application is ready."))
   }
-
 }
+

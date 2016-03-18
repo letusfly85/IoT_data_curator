@@ -25,3 +25,6 @@ resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
 routesGenerator := InjectedRoutesGenerator
 
+//resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+
+//libraryDependencies += "com.github.levkhomich" %% "akka-tracing-play" % "0.5-SNAPSHOT"
