@@ -1,23 +1,30 @@
 package controllers
 
+import javax.inject.{Singleton, Inject}
+
 import actors.{Actors, HelloActor}
 import actors.HelloActor.SayHello
 import akka.actor._
 import akka.util.Timeout
+import com.github.levkhomich.akka.tracing.BaseTracingSupport
 
-import com.github.levkhomich.akka.tracing.play.PlayControllerTracing
+import com.github.levkhomich.akka.tracing.play.{TracingSettings, PlayControllerTracing}
+//import models.GlobalZipkin
+import modules.GlobalZipkinModule
 import play.api.mvc._
 import play.libs.Akka
-import com.github.levkhomich.akka.tracing.play.TracingSettings
 
 import scala.concurrent.duration._
 
-class Application  extends Controller with PlayControllerTracing with TracingSettings {
+
+@Singleton
+class Application @Inject() (settings: GlobalZipkinModule) extends Controller with PlayControllerTracing  {
 
   implicit val sentimentAskTimeout: Timeout = Duration(100, SECONDS)
-  val system: ActorSystem = Akka.system()
+  val actorSystem: ActorSystem = Akka.system()
+  println(play.libs.Akka.system().settings.config.hasPath("akka.tracing.host"))
 
-  val hogeActor = system.actorOf(HelloActor.props, "hello")
+  val hogeActor = actorSystem.actorOf(HelloActor.props, "hoge")
   val sh = SayHello("aaaa")
 
   def index = Action {
