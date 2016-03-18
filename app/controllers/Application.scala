@@ -16,9 +16,9 @@ class Application extends Controller with PlayControllerTracing {
 
   implicit val sentimentAskTimeout: Timeout = Duration(1, SECONDS)
   val actorSystem = ActorSystem.create("TracingBasics", ConfigFactory.load("application"))
+  val helloActor = actorSystem.actorOf(Props[HelloActor], "HelloActor")
 
   def index = Action {implicit request =>
-    val helloActor = actorSystem.actorOf(Props[HelloActor], "hogehoge")
     val sayHello = SayHello("aaaa")
     helloActor ! sayHello
 
