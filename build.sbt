@@ -17,7 +17,7 @@ libraryDependencies ++= {
   Seq(
     "com.amazonaws" % "aws-java-sdk" % "1.10.52",
     "commons-configuration" % "commons-configuration" % "1.10",
-    "com.github.levkhomich" %% "akka-tracing-play" % "0.4"
+    "com.github.levkhomich" %% "akka-tracing-play" % "0.5-SNAPSHOT"
   )
 }
 
