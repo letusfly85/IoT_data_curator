@@ -16,12 +16,15 @@ libraryDependencies ++= Seq(
 libraryDependencies ++= {
   Seq(
     "com.amazonaws" % "aws-java-sdk" % "1.10.52",
-    "commons-configuration" % "commons-configuration" % "1.10"
+    "commons-configuration" % "commons-configuration" % "1.10",
+    "com.github.levkhomich" %% "akka-tracing-play" % "0.5-SNAPSHOT"
   )
 }
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
-// Play provides two styles of routers, one expects its actions to be injected, the
-// other, legacy style, accesses its actions statically.
 routesGenerator := InjectedRoutesGenerator
+
+//resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+
+//libraryDependencies += "com.github.levkhomich" %% "akka-tracing-play" % "0.5-SNAPSHOT"
